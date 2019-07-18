@@ -19,10 +19,14 @@ public class MainClass extends ApplicationAdapter {
 
 	@Override
 	public void render() {
+		batch.begin();
+		batch.draw(minijoe, 0 , 0);
+		batch.end();
 	}
 
 	@Override
 	public void dispose() {
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		minijoe.dispose();
 		batch.dispose();
 	}
