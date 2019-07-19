@@ -3,10 +3,12 @@ package com.leandro.antunez.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.leandro.antunez.game.actors.ActorJugador;
 
 public class MainGameScreen extends BaseScreen {
 
     private Stage stage;
+    private ActorJugador actorJugador;
 
     public MainGameScreen(MainGame game) {
         super(game);
@@ -15,6 +17,9 @@ public class MainGameScreen extends BaseScreen {
     @Override
     public void show() {
         stage = new Stage();
+        actorJugador = new ActorJugador();
+        stage.addActor(actorJugador);
+        actorJugador.setPosition(20,100);
     }
 
     @Override
