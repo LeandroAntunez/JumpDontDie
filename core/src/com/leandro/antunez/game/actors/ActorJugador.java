@@ -7,9 +7,12 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class ActorJugador extends Actor {
 
     private Texture texturaJugador;
+    private boolean alive;
 
     public ActorJugador(Texture textureJugador){
         this.texturaJugador = textureJugador;
+        setSize(textureJugador.getWidth(), textureJugador.getHeight());
+        this.setAlive(true);
     }
 
     @Override
@@ -24,4 +27,11 @@ public class ActorJugador extends Actor {
     }
 
 
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
 }

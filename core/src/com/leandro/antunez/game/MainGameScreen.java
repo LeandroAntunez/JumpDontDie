@@ -29,6 +29,7 @@ public class MainGameScreen extends BaseScreen {
     @Override
     public void show() {
         stage = new Stage();
+        stage.setDebugAll(true);
         stage.addActor(actorJugador);
         stage.addActor(actorPinchos);
         actorJugador.setPosition(20,100);
@@ -45,7 +46,16 @@ public class MainGameScreen extends BaseScreen {
         Gdx.gl.glClearColor(0.4f,0.5f,0.8f,1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act();
+        comprobarColisiones();
         stage.draw();
     }
+
+    private void comprobarColisiones() {
+        if (actorJugador.isAlive() && actorJugador.getX() + actorJugador.getWidth() > actorPinchos.getX()){
+            System.out.println("Hay colision");
+            actorJugador.setAlive(false);
+        }
+    }
+
 
 }
