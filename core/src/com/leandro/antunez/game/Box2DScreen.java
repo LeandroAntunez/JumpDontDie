@@ -27,7 +27,7 @@ public class Box2DScreen extends BaseScreen {
     public void show() {
         world = new World(new Vector2(0, -10), true);
         renderer = new Box2DDebugRenderer();
-        camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera = new OrthographicCamera(32, 18);
 
         BodyDef minijoeDef = createJoeBodyDef();
         minijoeBody = world.createBody(minijoeDef);
