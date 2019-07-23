@@ -16,4 +16,9 @@ public class ActorPinchos extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         batch.draw(pinchosRegion, getX(), getY());
     }
+
+    @Override
+    public void act(float delta) {
+        setX(getX() - 250 * delta);
+    }
 }
