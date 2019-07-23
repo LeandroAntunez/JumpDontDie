@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class Box2DScreen extends BaseScreen {
@@ -27,9 +28,14 @@ public class Box2DScreen extends BaseScreen {
         world = new World(new Vector2(0, -10), true);
         renderer = new Box2DDebugRenderer();
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
         BodyDef minijoeDef = createJoeBodyDef();
         minijoeBody = world.createBody(minijoeDef);
 
+        PolygonShape minijoeShape = new PolygonShape();
+        minijoeShape.setAsBox(1, 1);
+        minijoeFixture = minijoeBody.createFixture(minijoeShape, 1);
+        minijoeShape.dispose();
     }
 
     private BodyDef createJoeBodyDef() {
