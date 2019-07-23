@@ -16,8 +16,8 @@ public class Box2DScreen extends BaseScreen {
     private World world;
     private Box2DDebugRenderer renderer;
     private OrthographicCamera camera;
-    private Fixture minijoeFixture;
-    private Body minijoeBody;
+    private Fixture minijoeFixture, sueloFixture;
+    private Body minijoeBody, sueloBody;
 
     public Box2DScreen(MainGame game) {
         super(game);
@@ -28,14 +28,30 @@ public class Box2DScreen extends BaseScreen {
         world = new World(new Vector2(0, -10), true);
         renderer = new Box2DDebugRenderer();
         camera = new OrthographicCamera(32, 18);
+        camera.translate(0, 1);
+
+        BodyDef sueloDef = createSueloBodyDef();
+        sueloBody = world.createBody(sueloDef);
 
         BodyDef minijoeDef = createJoeBodyDef();
         minijoeBody = world.createBody(minijoeDef);
 
         PolygonShape minijoeShape = new PolygonShape();
-        minijoeShape.setAsBox(1, 1);
+        PolygonShape sueloShape = new PolygonShape();
+
+        sueloShape.setAsBox(500, 2);
+        sueloFixture = sueloBody.createFixture(sueloShape, 1);
+        sueloShape.dispose();
+
+        minijoeShape.setAsBox(0.5f, 0.5f);
         minijoeFixture = minijoeBody.createFixture(minijoeShape, 1);
         minijoeShape.dispose();
+    }
+
+    private BodyDef createSueloBodyDef() {
+        BodyDef def = new BodyDef();
+        def.position.set(0, -1);
+        return def;
     }
 
     private BodyDef createJoeBodyDef() {
@@ -55,6 +71,7 @@ public class Box2DScreen extends BaseScreen {
 
     @Override
     public void dispose() {
+        minijoeBody.destroyFixture(minijoeFixture);
         world.dispose();
         world.destroyBody(minijoeBody);
         renderer.dispose();
