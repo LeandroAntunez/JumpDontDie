@@ -26,7 +26,7 @@ public class Box2DScreen extends BaseScreen {
     private Body pinchoBody;
     private Body sueloBody;
     private Fixture sueloFixture;
-    private boolean haColisionado;
+    private boolean joeSaltando, debeSaltar;
 
     public Box2DScreen(MainGame game) {
         super(game);
@@ -44,17 +44,29 @@ public class Box2DScreen extends BaseScreen {
             public void beginContact(Contact contact) {
                 Fixture fixtureA = contact.getFixtureA(), fixtureB = contact.getFixtureB();
                 if (fixtureA == minijoeFixture && fixtureB == sueloFixture){
-                    haColisionado = true;
+                    if (Gdx.input.isTouched()){
+                        debeSaltar = true;
+                    }
+                    joeSaltando = false;
                 }
                 if (fixtureB == minijoeFixture && fixtureA == sueloFixture){
-                    haColisionado = true;
+                    if (Gdx.input.isTouched()){
+                        debeSaltar = true;
+                    }
+                    joeSaltando = false;
                 }
 
             }
 
             @Override
             public void endContact(Contact contact) {
-
+                Fixture fixtureA = contact.getFixtureA(), fixtureB = contact.getFixtureB();
+                if (fixtureA == minijoeFixture && fixtureB == sueloFixture){
+                    joeSaltando = true;
+                }
+                if (fixtureB == minijoeFixture && fixtureA == sueloFixture){
+                    joeSaltando = true;
+                }
             }
 
             @Override
@@ -129,9 +141,13 @@ public class Box2DScreen extends BaseScreen {
         Gdx.gl.glClearColor(0.4f,0.5f,0.8f,1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (Gdx.input.justTouched() || haColisionado){
-            haColisionado = false;
+        if (debeSaltar){
+            debeSaltar = false;
             saltar();
+        }
+
+        if (Gdx.input.justTouched() && !joeSaltando){
+            debeSaltar = true;
         }
 
         world.step(delta, 6, 2);
