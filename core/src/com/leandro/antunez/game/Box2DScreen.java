@@ -16,8 +16,12 @@ public class Box2DScreen extends BaseScreen {
     private World world;
     private Box2DDebugRenderer renderer;
     private OrthographicCamera camera;
-    private Fixture minijoeFixture, sueloFixture;
-    private Body minijoeBody, sueloBody;
+    private Fixture minijoeFixture;
+    private Fixture pinchoFixture;
+    private Body minijoeBody;
+    private Body pinchoBody;
+    private Body sueloBody;
+    private Fixture sueloFixture;
 
     public Box2DScreen(MainGame game) {
         super(game);
@@ -30,22 +34,39 @@ public class Box2DScreen extends BaseScreen {
         camera = new OrthographicCamera(32, 18);
         camera.translate(0, 1);
 
+        BodyDef pinchoDef = createPinchoBodyDef(0.5f);
+        pinchoBody = world.createBody(pinchoDef);
+        pinchoFixture = createPinchoFixture(pinchoBody);
+
         BodyDef sueloDef = createSueloBodyDef();
         sueloBody = world.createBody(sueloDef);
+        PolygonShape sueloShape = new PolygonShape();
+        sueloShape.setAsBox(500, 1);
+        sueloFixture = sueloBody.createFixture(sueloShape, 1);
 
         BodyDef minijoeDef = createJoeBodyDef();
         minijoeBody = world.createBody(minijoeDef);
-
         PolygonShape minijoeShape = new PolygonShape();
-        PolygonShape sueloShape = new PolygonShape();
-
-        sueloShape.setAsBox(500, 2);
-        sueloFixture = sueloBody.createFixture(sueloShape, 1);
-        sueloShape.dispose();
-
         minijoeShape.setAsBox(0.5f, 0.5f);
         minijoeFixture = minijoeBody.createFixture(minijoeShape, 1);
+        sueloShape.dispose();
         minijoeShape.dispose();
+    }
+
+    private BodyDef createPinchoBodyDef(float x) {
+        BodyDef def = new BodyDef();
+        def.position.set(x, 0.5f);
+        return def;
+    }
+
+    private Fixture createPinchoFixture(Body pinchoBody){
+        Vector2[] vertices = new Vector2[3];
+        vertices[0] = new Vector2(-0.5f, -0.5f);
+        vertices[1] = new Vector2(0.5f, -0.5f);
+        vertices[2] = new Vector2(0, 0.5f);
+        PolygonShape shape = new PolygonShape();
+        shape.set(vertices);
+        return pinchoBody.createFixture(shape, 1);
     }
 
     private BodyDef createSueloBodyDef() {
@@ -72,8 +93,12 @@ public class Box2DScreen extends BaseScreen {
     @Override
     public void dispose() {
         minijoeBody.destroyFixture(minijoeFixture);
-        world.dispose();
+        sueloBody.destroyFixture(sueloFixture);
+        pinchoBody.destroyFixture(pinchoFixture);
+        world.destroyBody(pinchoBody);
+        world.destroyBody(sueloBody);
         world.destroyBody(minijoeBody);
+        world.dispose();
         renderer.dispose();
     }
 }
