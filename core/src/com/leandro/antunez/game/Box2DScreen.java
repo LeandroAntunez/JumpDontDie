@@ -53,6 +53,11 @@ public class Box2DScreen extends BaseScreen {
         minijoeShape.dispose();
     }
 
+    private void saltar(){
+        Vector2 position = minijoeBody.getPosition();
+        minijoeBody.applyLinearImpulse(0,20, position.x, position.y, true);
+    }
+
     private BodyDef createPinchoBodyDef(float x) {
         BodyDef def = new BodyDef();
         def.position.set(x, 0.5f);
@@ -86,8 +91,15 @@ public class Box2DScreen extends BaseScreen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0.4f,0.5f,0.8f,1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        if (Gdx.input.justTouched()){
+            saltar();
+        }
+
         world.step(delta, 6, 2);
+        camera.update();
         renderer.render(world, camera.combined);
+
     }
 
     @Override
