@@ -7,7 +7,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -22,6 +26,7 @@ public class Box2DScreen extends BaseScreen {
     private Body pinchoBody;
     private Body sueloBody;
     private Fixture sueloFixture;
+    private boolean haColisionado;
 
     public Box2DScreen(MainGame game) {
         super(game);
@@ -33,6 +38,38 @@ public class Box2DScreen extends BaseScreen {
         renderer = new Box2DDebugRenderer();
         camera = new OrthographicCamera(32, 18);
         camera.translate(0, 1);
+
+        world.setContactListener(new ContactListener() {
+            @Override
+            public void beginContact(Contact contact) {
+                Fixture fixtureA = contact.getFixtureA(), fixtureB = contact.getFixtureB();
+                if (fixtureA == minijoeFixture && fixtureB == sueloFixture){
+                    haColisionado = true;
+                }
+                if (fixtureB == minijoeFixture && fixtureA == sueloFixture){
+                    haColisionado = true;
+                }
+
+            }
+
+            @Override
+            public void endContact(Contact contact) {
+
+            }
+
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold) {
+
+            }
+
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse) {
+
+            }
+        });
+
+
+
 
         BodyDef pinchoDef = createPinchoBodyDef(0.5f);
         pinchoBody = world.createBody(pinchoDef);
@@ -55,7 +92,7 @@ public class Box2DScreen extends BaseScreen {
 
     private void saltar(){
         Vector2 position = minijoeBody.getPosition();
-        minijoeBody.applyLinearImpulse(0,20, position.x, position.y, true);
+        minijoeBody.applyLinearImpulse(0,5, position.x, position.y, true);
     }
 
     private BodyDef createPinchoBodyDef(float x) {
@@ -92,7 +129,8 @@ public class Box2DScreen extends BaseScreen {
         Gdx.gl.glClearColor(0.4f,0.5f,0.8f,1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (Gdx.input.justTouched()){
+        if (Gdx.input.justTouched() || haColisionado){
+            haColisionado = false;
             saltar();
         }
 
