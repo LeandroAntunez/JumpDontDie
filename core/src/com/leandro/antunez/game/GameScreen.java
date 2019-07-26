@@ -7,13 +7,20 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.leandro.antunez.game.entities.FloorEntity;
 import com.leandro.antunez.game.entities.PlayerEntity;
+import com.leandro.antunez.game.entities.SpikeEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameScreen extends BaseScreen {
 
     private Stage stage;
     private World world;
     private PlayerEntity playerEntity;
+    private List<FloorEntity> floorEntityList = new ArrayList<FloorEntity>();
+    private List<SpikeEntity> spikeEntityList = new ArrayList<SpikeEntity>();
 
     public GameScreen(MainGame game) {
         super(game);
@@ -23,16 +30,40 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void show() {
-        Texture texture = game.getAssetManager().get("minijoe.png");
-        Vector2 position = new Vector2(1, 2);
-        playerEntity = new PlayerEntity(world, texture, position);
+        Texture playerTexture = game.getAssetManager().get("minijoe.png");
+        Texture spikeTexture = game.getAssetManager().get("spike.png");
+        Texture floorTexture = game.getAssetManager().get("floor.png");
+        Texture overfloorTexture = game.getAssetManager().get("overfloor.png");
+        Vector2 position = new Vector2(1.5f, 1.5f);
+        playerEntity = new PlayerEntity(world, playerTexture, position);
+
+
+        floorEntityList.add(new FloorEntity(world, floorTexture, overfloorTexture, 0, 1000, 1));
+        spikeEntityList.add(new SpikeEntity(world, spikeTexture, 6, 1));
+
+
         stage.addActor(playerEntity);
+        for (FloorEntity floor : floorEntityList){
+            stage.addActor(floor);
+        }
+        for (SpikeEntity spike : spikeEntityList){
+            stage.addActor(spike);
+        }
+
     }
 
     @Override
     public void hide() {
         playerEntity.detach();
         playerEntity.remove();
+        for (FloorEntity floor : floorEntityList){
+            floor.detach();
+            floor.remove();
+        }
+        for (SpikeEntity spike : spikeEntityList){
+            spike.detach();
+            spike.remove();
+        }
 
     }
 
