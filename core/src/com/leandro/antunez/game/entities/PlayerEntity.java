@@ -38,7 +38,8 @@ public class PlayerEntity extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        setPosition(body.getPosition().x * PIXEL_IN_METERS, body.getPosition().y * PIXEL_IN_METERS);
+        setPosition((body.getPosition().x - 0.5f) * PIXEL_IN_METERS,
+                (body.getPosition().y - 0.5f) * PIXEL_IN_METERS);
         batch.draw(texture, getX(), getY(), getWidth(), getHeight());
 
     }
