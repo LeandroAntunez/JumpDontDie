@@ -19,8 +19,8 @@ public class FloorEntity extends Actor {
     private final World world;
     private final Texture floor;
     private final Texture overfloor;
-    private final Body body;
-    private final Fixture fixture;
+    private final Body body, leftBody;
+    private final Fixture fixture, leftFixture;
 
     public FloorEntity(World world, Texture floor, Texture overfloor, float x, float width, float y){
         this.world = world;
@@ -37,8 +37,18 @@ public class FloorEntity extends Actor {
         fixture.setUserData("floor");
         box.dispose();
 
+        BodyDef leftDef = new BodyDef();
+        leftDef.position.set(x, y - 0.55f);
+        this.leftBody = world.createBody(leftDef);
+
+        PolygonShape leftBox = new PolygonShape();
+        leftBox.setAsBox(0.02f, 0.45f);
+        this.leftFixture = leftBody.createFixture(leftBox, 1);
+        leftFixture.setUserData("spike");
+        leftBox.dispose();
+
         setSize(width * PIXEL_IN_METERS, PIXEL_IN_METERS);
-        setPosition((x - width / 2) * PIXEL_IN_METERS, (y - 1) * PIXEL_IN_METERS);
+        setPosition(x * PIXEL_IN_METERS, (y - 1) * PIXEL_IN_METERS);
     }
 
     @Override

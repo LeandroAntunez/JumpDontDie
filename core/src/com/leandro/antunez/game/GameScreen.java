@@ -49,6 +49,7 @@ public class GameScreen extends BaseScreen {
 
                 if (areCollided(contact, "player", "spike")){
                     playerEntity.setAlive(false);
+                    System.out.println("Has muerto.");
                 }
             }
 
@@ -75,10 +76,10 @@ public class GameScreen extends BaseScreen {
         Texture spikeTexture = game.getAssetManager().get("spike.png");
         Texture floorTexture = game.getAssetManager().get("floor.png");
         Texture overfloorTexture = game.getAssetManager().get("overfloor.png");
-        Vector2 position = new Vector2(1.5f, 1.5f);
+        Vector2 position = new Vector2(0, 1.5f);
         playerEntity = new PlayerEntity(world, playerTexture, position);
 
-
+        floorEntityList.add(new FloorEntity(world, floorTexture, overfloorTexture, 12, 10, 2));
         floorEntityList.add(new FloorEntity(world, floorTexture, overfloorTexture, 0, 1000, 1));
         spikeEntityList.add(new SpikeEntity(world, spikeTexture, 6, 1));
 

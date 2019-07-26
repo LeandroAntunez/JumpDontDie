@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
+import static com.leandro.antunez.game.constants.Constants.IMPULSE_JUMP;
 import static com.leandro.antunez.game.constants.Constants.PIXEL_IN_METERS;
 
 public class PlayerEntity extends Actor {
@@ -40,7 +41,7 @@ public class PlayerEntity extends Actor {
 
     @Override
     public void act(float delta) {
-        if (Gdx.input.justTouched() || mustJump){
+        if (Gdx.input.justTouched() || isMustJump()){
             mustJump = false;
             jump();
         }
@@ -49,13 +50,16 @@ public class PlayerEntity extends Actor {
             float speedY = body.getLinearVelocity().y;
             body.setLinearVelocity(8, speedY);
         }
+        if (jumping){
+            body.applyForceToCenter(0, -IMPULSE_JUMP * 1.115f, true);
+        }
     }
 
     private void jump() {
-        if (!jumping && alive){
+        if (!jumping && isAlive()){
             jumping = true;
             Vector2 position = body.getPosition();
-            body.applyLinearImpulse(0,5, position.x, position.y, true);
+            body.applyLinearImpulse(0, IMPULSE_JUMP, position.x, position.y, true);
         }
     }
 
