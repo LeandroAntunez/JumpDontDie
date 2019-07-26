@@ -18,6 +18,9 @@ import com.leandro.antunez.game.entities.SpikeEntity;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.leandro.antunez.game.constants.Constants.PIXEL_IN_METERS;
+import static com.leandro.antunez.game.constants.Constants.PLAYER_SPEED;
+
 public class GameScreen extends BaseScreen {
 
     private Stage stage;
@@ -26,7 +29,7 @@ public class GameScreen extends BaseScreen {
     private List<FloorEntity> floorEntityList = new ArrayList<FloorEntity>();
     private List<SpikeEntity> spikeEntityList = new ArrayList<SpikeEntity>();
 
-    public GameScreen(MainGame game) {
+    GameScreen(MainGame game) {
         super(game);
         stage = new Stage(new FitViewport(640, 360));
         world = new World(new Vector2(0, -10), true);
@@ -81,7 +84,12 @@ public class GameScreen extends BaseScreen {
 
         floorEntityList.add(new FloorEntity(world, floorTexture, overfloorTexture, 12, 10, 2));
         floorEntityList.add(new FloorEntity(world, floorTexture, overfloorTexture, 0, 1000, 1));
-        spikeEntityList.add(new SpikeEntity(world, spikeTexture, 6, 1));
+        floorEntityList.add(new FloorEntity(world, floorTexture, overfloorTexture, 30, 8, 2));
+        spikeEntityList.add(new SpikeEntity(world, spikeTexture, 5, 1));
+        spikeEntityList.add(new SpikeEntity(world, spikeTexture, 21, 2));
+        spikeEntityList.add(new SpikeEntity(world, spikeTexture, 23, 1));
+        spikeEntityList.add(new SpikeEntity(world, spikeTexture, 36, 2));
+        spikeEntityList.add(new SpikeEntity(world, spikeTexture, 44, 1));
 
 
         stage.addActor(playerEntity);
@@ -113,6 +121,9 @@ public class GameScreen extends BaseScreen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0.4f,0.5f,0.8f,1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        if (playerEntity.getX() > 100 && playerEntity.isAlive()){
+            stage.getCamera().translate(PLAYER_SPEED * delta * PIXEL_IN_METERS, 0, 0);
+        }
         stage.act();
         world.step(delta, 6, 2);
         stage.draw();

@@ -8,7 +8,7 @@ public class MainGame extends Game {
 
     private AssetManager assetManager;
 
-    public AssetManager getAssetManager() {
+    AssetManager getAssetManager() {
         return assetManager;
     }
 

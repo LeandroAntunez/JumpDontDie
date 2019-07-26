@@ -8,9 +8,6 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.leandro.antunez.game.constants.Constants;
-
-import java.awt.Polygon;
 
 import static com.leandro.antunez.game.constants.Constants.PIXEL_IN_METERS;
 
@@ -60,5 +57,7 @@ public class FloorEntity extends Actor {
     public void detach(){
         body.destroyFixture(fixture);
         world.destroyBody(body);
+        leftBody.destroyFixture(leftFixture);
+        world.destroyBody(leftBody);
     }
 }

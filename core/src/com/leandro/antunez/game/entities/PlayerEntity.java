@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import static com.leandro.antunez.game.constants.Constants.IMPULSE_JUMP;
 import static com.leandro.antunez.game.constants.Constants.PIXEL_IN_METERS;
+import static com.leandro.antunez.game.constants.Constants.PLAYER_SPEED;
 
 public class PlayerEntity extends Actor {
 
@@ -48,7 +49,7 @@ public class PlayerEntity extends Actor {
 
         if (alive) {
             float speedY = body.getLinearVelocity().y;
-            body.setLinearVelocity(8, speedY);
+            body.setLinearVelocity(PLAYER_SPEED, speedY);
         }
         if (jumping){
             body.applyForceToCenter(0, -IMPULSE_JUMP * 1.115f, true);
@@ -80,7 +81,7 @@ public class PlayerEntity extends Actor {
         this.jumping = isJumping;
     }
 
-    public boolean isMustJump() {
+    private boolean isMustJump() {
         return mustJump;
     }
 
@@ -94,5 +95,9 @@ public class PlayerEntity extends Actor {
 
     public void setAlive(boolean alive) {
         this.alive = alive;
+    }
+
+    public float getPositionX() {
+        return body.getPosition().x;
     }
 }
