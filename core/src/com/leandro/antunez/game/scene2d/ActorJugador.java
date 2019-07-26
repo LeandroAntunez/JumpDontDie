@@ -1,4 +1,4 @@
-package com.leandro.antunez.game.actors;
+package com.leandro.antunez.game.scene2d;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;

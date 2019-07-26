@@ -1,14 +1,14 @@
-package com.leandro.antunez.game;
+package com.leandro.antunez.game.scene2d;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.leandro.antunez.game.actors.ActorJugador;
-import com.leandro.antunez.game.actors.ActorPinchos;
+import com.leandro.antunez.game.BaseScreen;
+import com.leandro.antunez.game.MainGame;
 
-public class MainGameScreen extends BaseScreen {
+public class Scene2DScreen extends BaseScreen {
 
     private Stage stage;
     private Texture texturaJugador;
@@ -17,7 +17,7 @@ public class MainGameScreen extends BaseScreen {
     private ActorPinchos actorPinchos;
     private TextureRegion regionPinchos;
 
-    MainGameScreen(MainGame game) {
+    Scene2DScreen(MainGame game) {
         super(game);
         texturaJugador = new Texture("minijoe.png");
         texturaPinchos = new Texture("spike.png");
