@@ -1,6 +1,5 @@
 package com.leandro.antunez.game.entities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
@@ -42,7 +41,7 @@ public class PlayerEntity extends Actor {
 
     @Override
     public void act(float delta) {
-        if (Gdx.input.justTouched() || isMustJump()){
+        if (isMustJump()){
             mustJump = false;
             jump();
         }
@@ -56,7 +55,7 @@ public class PlayerEntity extends Actor {
         }
     }
 
-    private void jump() {
+    public void jump() {
         if (!jumping && isAlive()){
             jumping = true;
             Vector2 position = body.getPosition();
@@ -97,7 +96,4 @@ public class PlayerEntity extends Actor {
         this.alive = alive;
     }
 
-    public float getPositionX() {
-        return body.getPosition().x;
-    }
 }

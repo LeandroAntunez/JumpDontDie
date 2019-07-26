@@ -1,6 +1,7 @@
 package com.leandro.antunez.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
@@ -28,9 +29,13 @@ public class GameScreen extends BaseScreen {
     private PlayerEntity playerEntity;
     private List<FloorEntity> floorEntityList = new ArrayList<FloorEntity>();
     private List<SpikeEntity> spikeEntityList = new ArrayList<SpikeEntity>();
+    private Sound jumpSound, dieSound, bgMusic;
 
     GameScreen(MainGame game) {
         super(game);
+        jumpSound = game.getAssetManager().get("jump.ogg");
+        dieSound = game.getAssetManager().get("die.ogg");
+        bgMusic = game.getAssetManager().get("song.ogg");
         stage = new Stage(new FitViewport(640, 360));
         world = new World(new Vector2(0, -10), true);
 
@@ -51,8 +56,12 @@ public class GameScreen extends BaseScreen {
                 }
 
                 if (areCollided(contact, "player", "spike")){
-                    playerEntity.setAlive(false);
-                    System.out.println("Has muerto.");
+                    if (playerEntity.isAlive()) {
+                        playerEntity.setAlive(false);
+                        System.out.println("Has muerto.");
+                        dieSound.play();
+                        bgMusic.stop();
+                    }
                 }
             }
 
@@ -79,6 +88,7 @@ public class GameScreen extends BaseScreen {
         Texture spikeTexture = game.getAssetManager().get("spike.png");
         Texture floorTexture = game.getAssetManager().get("floor.png");
         Texture overfloorTexture = game.getAssetManager().get("overfloor.png");
+
         Vector2 position = new Vector2(0, 1.5f);
         playerEntity = new PlayerEntity(world, playerTexture, position);
 
@@ -100,10 +110,12 @@ public class GameScreen extends BaseScreen {
             stage.addActor(spike);
         }
 
+        bgMusic.loop(0.75f);
     }
 
     @Override
     public void hide() {
+        bgMusic.stop();
         playerEntity.detach();
         playerEntity.remove();
         for (FloorEntity floor : floorEntityList){
@@ -121,9 +133,17 @@ public class GameScreen extends BaseScreen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0.4f,0.5f,0.8f,1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         if (playerEntity.getX() > 100 && playerEntity.isAlive()){
             stage.getCamera().translate(PLAYER_SPEED * delta * PIXEL_IN_METERS, 0, 0);
         }
+
+        if (Gdx.input.justTouched()){
+            jumpSound.play();
+            playerEntity.jump();
+
+        }
+
         stage.act();
         world.step(delta, 6, 2);
         stage.draw();
