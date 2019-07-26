@@ -34,6 +34,7 @@ public class SpikeEntity extends Actor {
         vertices[2] = new Vector2(0, 0.5f);
         box.set(vertices);
         this.fixture = body.createFixture(box, 1);
+        fixture.setUserData("spike");
         box.dispose();
 
 
