@@ -1,6 +1,7 @@
 package com.leandro.antunez.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.leandro.antunez.game.entities.FloorEntity;
 import com.leandro.antunez.game.entities.PlayerEntity;
@@ -29,9 +31,10 @@ public class GameScreen extends BaseScreen {
     private PlayerEntity playerEntity;
     private List<FloorEntity> floorEntityList = new ArrayList<FloorEntity>();
     private List<SpikeEntity> spikeEntityList = new ArrayList<SpikeEntity>();
-    private Sound jumpSound, dieSound, bgMusic;
+    private Sound jumpSound, dieSound;
+    private Music bgMusic;
 
-    GameScreen(MainGame game) {
+    GameScreen(final MainGame game) {
         super(game);
         jumpSound = game.getAssetManager().get("jump.ogg");
         dieSound = game.getAssetManager().get("die.ogg");
@@ -58,27 +61,31 @@ public class GameScreen extends BaseScreen {
                 if (areCollided(contact, "player", "spike")){
                     if (playerEntity.isAlive()) {
                         playerEntity.setAlive(false);
-                        System.out.println("Has muerto.");
                         dieSound.play();
                         bgMusic.stop();
+
+                        stage.addAction(
+
+                                Actions.sequence(
+                                        Actions.delay(1.5f),
+                                        Actions.run(new Runnable() {
+                                            @Override public void run() {
+                                                game.setScreen(game.getGameOverScreen());
+                                            }
+                                        })
+                                ));
                     }
                 }
             }
 
             @Override
-            public void endContact(Contact contact) {
-
-            }
+            public void endContact(Contact contact) { }
 
             @Override
-            public void preSolve(Contact contact, Manifold oldManifold) {
-
-            }
+            public void preSolve(Contact contact, Manifold oldManifold) { }
 
             @Override
-            public void postSolve(Contact contact, ContactImpulse impulse) {
-
-            }
+            public void postSolve(Contact contact, ContactImpulse impulse) { }
         });
     }
 
@@ -95,7 +102,7 @@ public class GameScreen extends BaseScreen {
         floorEntityList.add(new FloorEntity(world, floorTexture, overfloorTexture, 12, 10, 2));
         floorEntityList.add(new FloorEntity(world, floorTexture, overfloorTexture, 0, 1000, 1));
         floorEntityList.add(new FloorEntity(world, floorTexture, overfloorTexture, 30, 8, 2));
-        spikeEntityList.add(new SpikeEntity(world, spikeTexture, 5, 1));
+        spikeEntityList.add(new SpikeEntity(world, spikeTexture, 6, 1));
         spikeEntityList.add(new SpikeEntity(world, spikeTexture, 21, 2));
         spikeEntityList.add(new SpikeEntity(world, spikeTexture, 23, 1));
         spikeEntityList.add(new SpikeEntity(world, spikeTexture, 36, 2));
@@ -110,7 +117,8 @@ public class GameScreen extends BaseScreen {
             stage.addActor(spike);
         }
 
-        bgMusic.loop(0.75f);
+        bgMusic.setVolume(0.50f);
+        bgMusic.play();
     }
 
     @Override
